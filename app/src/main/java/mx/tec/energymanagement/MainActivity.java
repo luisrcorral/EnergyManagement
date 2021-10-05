@@ -10,10 +10,14 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.BatteryManager;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+
+
+
 
     private TextView powerStatus;
 
@@ -50,7 +54,9 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView connStatusTxt;
 
-    private void netWorkStatus() {
+    private BroadcastReceiver netWorkStatus = new BroadcastReceiver(){
+        @Override
+        public void onReceive(Context ctxt, Intent intent) {
 
         String networkType = "";
 
@@ -77,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         catch (Exception e){
             connStatusTxt.setText("Device is not online");
         }
-
+        }
     };
 
 
@@ -92,9 +98,10 @@ public class MainActivity extends AppCompatActivity {
             powerStatus = findViewById(R.id.powerStatusTxt);
             connStatusTxt = findViewById(R.id.connStatusTxt);
 
+
             this.registerReceiver(this.mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
             this.registerReceiver(this.plugInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-            this.netWorkStatus();
+            this.registerReceiver(this.netWorkStatus, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
     }
 }
