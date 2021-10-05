@@ -58,12 +58,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context ctxt, Intent intent) {
 
-        String networkType = "";
+          String networkType = "";
 
-        Context myContext = getApplicationContext();
-        ConnectivityManager cm = (ConnectivityManager) myContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+          Context myContext = getApplicationContext();
+          ConnectivityManager cm = (ConnectivityManager) myContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        try{
+          try{
             NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
             if (activeNetwork.isConnectedOrConnecting()) {
 
@@ -79,10 +79,10 @@ public class MainActivity extends AppCompatActivity {
 
             }
             connStatusTxt.setText("Network Type: " + networkType);
-        }
-        catch (Exception e){
+          }
+          catch (Exception e){
             connStatusTxt.setText("Device is not online");
-        }
+          }
         }
     };
 
@@ -102,6 +102,12 @@ public class MainActivity extends AppCompatActivity {
             this.registerReceiver(this.mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
             this.registerReceiver(this.plugInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
             this.registerReceiver(this.netWorkStatus, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+
+            PowerManager pm = (PowerManager)  getSystemService(Context.POWER_SERVICE);
+            PowerManager.WakeLock myWakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "MyApp::MyTag");
+            myWakeLock.acquire();
+             //	..screen will stay on during this section..
+            myWakeLock.release();
 
     }
 }
